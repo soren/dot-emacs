@@ -1,8 +1,8 @@
 My Emacs Configuration
 ======================
 
-This is my .emacs.el and releated files that together configure GNU
-Emacs the way I like it.
+This is my `.emacs.el` file and releated files, together they
+configure GNU Emacs the way I like it.
 
 I'm trying to make the configuration work across operating systems,
 that is Linux and Windows. I mostly use Linux, which means that
