@@ -50,10 +50,6 @@
 
 (setq slu-dot-emacs-config-subdirs '("built-in" "contrib"))
 
-;; Setup the root-directory for the lisp files
-
-(setq slu-dot-emacs-lisp-root-dir (concat slu-dot-emacs-root-dir "my-lisp"))
-
 ;; Setup my local lisp directory
 
 (defvar slu-dot-emacs-my-lisp-dir (expand-file-name "~/.emacs.d/lisp/")
@@ -90,7 +86,6 @@
   (interactive)
   (mapcar (lambda (x) (byte-recompile-directory x 0))
 	  (list slu-dot-emacs-config-root-dir
-		slu-dot-emacs-lisp-root-dir
 		slu-dot-emacs-my-lisp-dir)))
 
 (let ((start-time (current-time)))
@@ -114,12 +109,6 @@
         (load (car files))
         (setq files (cdr files)))
       (setq slu-dot-emacs-config-subdirs (cdr slu-dot-emacs-config-subdirs)))
-
-    ;; Load my own lisp code
-    (setq files (directory-files slu-dot-emacs-lisp-root-dir t "\\.el$"))
-    (while files
-      (load (car files))
-      (setq files (cdr files))))
 
   (message "[dot-emacs] Done in %.06f seconds" (float-time (time-since start-time))))
 
