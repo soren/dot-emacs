@@ -108,7 +108,7 @@
       (while files
         (load (car files))
         (setq files (cdr files)))
-      (setq slu-dot-emacs-config-subdirs (cdr slu-dot-emacs-config-subdirs)))
+      (setq slu-dot-emacs-config-subdirs (cdr slu-dot-emacs-config-subdirs))))
 
   (message "[dot-emacs] Done in %.06f seconds" (float-time (time-since start-time))))
 
