@@ -1,4 +1,4 @@
-;;; compilation.el --- ripgrep set up -*-coding:utf-8-*-
+;;; ripgrep.el --- ripgrep set up -*-coding:utf-8-*-
 
 ;; Copyright (c) 2019 Søren Lund <soren@lund.org>
 
