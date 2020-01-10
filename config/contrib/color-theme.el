@@ -28,6 +28,8 @@
       (slu-dot-emacs-clone git-url)
       (add-to-list 'custom-theme-load-path
                    (concat slu-dot-emacs-my-lisp-dir (file-name-nondirectory git-url)))
+      (setq frame-background-mode 'dark)
+      (set-frame-parameter nil 'background-mode 'dark)
       (load-theme 'solarized t)))
 
 ;;; color-theme.el ends here
