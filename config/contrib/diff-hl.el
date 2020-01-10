@@ -29,7 +29,6 @@
     (progn
       (require 'diff-hl)
       (global-diff-hl-mode)
-      (advice-add 'svn-status-update-modeline :after #'diff-hl-update)
       (if (featurep 'psvn)
           (advice-add 'svn-status-update-modeline :after #'diff-hl-update)
       (if (featurep 'magit-mode)
