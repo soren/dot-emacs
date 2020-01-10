@@ -19,7 +19,8 @@
 
 ;;; Commentary:
 
-;; Use external program `rg` to search in files
+;; Use external program `rg` to search in files.
+
 ;; See https://github.com/BurntSushi/ripgrep
 
 ;;; Code:
@@ -44,6 +45,8 @@
             (compilation-start (concat command-args " < /dev/null") ;; shouldn't use null-device
                                'grep-mode)))
         
-        (global-set-key [f7] 'ripgrep))))
+        (global-set-key [f7] 'ripgrep)))
+  (message "[dot-emacs] Cannot find rp executable, skipping ripgrep install"))
+
 
 ;;; ripgrep.el ends here
