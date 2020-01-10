@@ -81,6 +81,40 @@
       (message "[dot-emacs] Cannot find %s - download it from %s" dir url)
       nil)))
 
+(defvar slu-dot-emacs-git-executable
+  (executable-find "git")
+  "Git executable.")
+
+(defun slu-dot-emacs-clone (git-url)
+  "Clone git repository from GIT-URL"
+  (if slu-dot-emacs-git-executable
+      (let ((default-directory slu-dot-emacs-my-lisp-dir)
+            (dir-name (file-name-nondirectory git-url)))
+        (if (not (file-exists-p dir-name))
+            (with-temp-buffer
+              (let ((exit-code
+                     (apply 'call-process
+                            (append
+                             (list slu-dot-emacs-git-executable nil t nil)
+                             (list "--no-pager" "clone" git-url)))))
+                (if (zerop exit-code)
+                    (message "%s" (buffer-string))
+                  (message "[dot-emacs] Unable to clone git repository: %s\n%s"
+                           git-url
+                           (buffer-string)))))
+          (message "[dot-emacs] Git repository already cloned, skipping")))
+    (message "[dot-emacs] No git, unable to clone")))
+
+(defun slu-dot-emacs-clone-and-add (git-url)
+  "Clone git repo and add wc to load-path."
+  (progn
+    (slu-dot-emacs-clone git-url)
+    (let ((full-path (concat slu-dot-emacs-my-lisp-dir (file-name-nondirectory git-url))))
+      (if (file-exists-p full-path)
+	  (add-to-list 'load-path (expand-file-name full-path))
+        (message "[dot-emacs] Unable to install from %s" git-url)
+        nil))))
+
 (defun slu-dot-emacs-compile-lisp-files ()
   "Compiles the elisp files (.el files)"
   (interactive)
