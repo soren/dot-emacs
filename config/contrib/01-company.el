@@ -30,4 +30,7 @@
 
 (require 'company)
 
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+
 ;;; 01-company.el ends here
