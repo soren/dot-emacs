@@ -134,6 +134,7 @@
     (setq my-timeclock-workday 26640) ; 7.4 hour/day, e.g. 37 hours work week
     (setq my-diary-file "~/diary")
     (setq my-ispell-change-dictionary "dansk")
+    (setq my-alternate-browser  "/usr/bin/chromium-browser")
 
     (unless (file-exists-p slu-dot-emacs-my-lisp-dir)
       (make-directory slu-dot-emacs-my-lisp-dir t))
