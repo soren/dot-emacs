@@ -148,6 +148,12 @@
 
 
 ;; ---------------------------------------------------------------------
+;; Protect the *scratch* buffer from being killed:
+
+(with-current-buffer "*scratch*"
+  (emacs-lock-mode 'kill))
+
+;; ---------------------------------------------------------------------
 ;; Hooks:
 
 ;; Enable automatic time stamping
