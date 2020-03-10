@@ -48,5 +48,4 @@
         (global-set-key [f7] 'ripgrep)))
   (message "[dot-emacs] Cannot find rp executable, skipping ripgrep install"))
 
-
 ;;; ripgrep.el ends here
