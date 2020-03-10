@@ -64,6 +64,4 @@
 Use %%(diary-birthday month day year) in your diary file."
   (diary-anniversary month day year 'diary-birthday-face))
 
-(calendar)
-
 ;;; calendar.el ends here
