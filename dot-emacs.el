@@ -26,69 +26,66 @@
 ;; This actually replaces most of my GNU/Emacs configuration, i.e. the
 ;; infamous .emacs file.
 
-
 ;;; Code:
+
+;; Set some variables used to configure modes etc. You would want to
+;; override some of these.
+
+(defvar my-calendar-latitude 55.675876
+  "*Latitude of Copenhagen, used by e.g. M-x sunrise-sunset")
+(defvar my-calendar-longitude 12.569066
+  "*Longitude of Copenhagen, used by e.g. M-x sunrise-sunset")
+(defvar my-calendar-location-name "København"
+  "*Copenhagen in danish, used by e.g. M-x sunrise-sunset")
+
+(defvar my-timeclock-file "~/Projects/My/timelogs/timelog"
+  "*")
+(defvar my-timeclock-workday 26640
+  "*A workday is 7.4 hours, e.g. a 37 hours work week")
+
+(defvar my-diary-file "~/diary"
+  "*")
+(defvar my-ispell-change-dictionary "dansk"
+  "*")
+(defvar my-alternate-browser "/usr/bin/chromium-browser"
+  "*I'm using this for livedown")
 
 (defvar slu-dot-emacs-dryrun nil
   "*Set dryrun if no files should be loaded.")
 
-;; Find the root-directory, i.e. the absolute path to the directory
-;; where this script lives
+(defvar slu-dot-emacs-lisp-dir
+  (expand-file-name (concat user-emacs-directory "slu-dot-emacs/"))
+  "*Local lisp directory. Will download and/or look for packages
+  and lisp files here.")
 
-(setq slu-dot-emacs-root-dir
-      (file-name-directory
-       (if load-in-progress load-file-name buffer-file-name)))
+(defvar slu-dot-emacs-git-executable
+  (executable-find "git")
+  "*Path to Git executable.")
 
-;; Setup the root-directory for the configuration files
+
+;; Setup the root-directory for the configuration files. It will be an
+;; absolute path, found by finding the directory where this script
+;; lives
 
 (setq slu-dot-emacs-config-root-dir
-      (concat slu-dot-emacs-root-dir "config"))
+      (concat (file-name-directory
+               (if load-in-progress load-file-name buffer-file-name))
+              "config"))
 
-;; Setup subdirectories to load configurations from.
-;; built-in - contains simple configuration. Standard Emacs stuff, i.e. no need to download/install anything.
+;; Setup subdirectories to load configurations from:
+
+;; built-in - contains simple configuration. Standard Emacs stuff,
+;;            i.e. no need to download/install anything.
+
 ;; contrib - contains contributed modes and packages.
 
 (setq slu-dot-emacs-config-subdirs '("built-in" "contrib"))
 
-;; Setup my local lisp directory
-
-(defvar slu-dot-emacs-my-lisp-dir (expand-file-name "~/.emacs.d/lisp/")
-  "*Local lisp directory. Will look for packages and lisp files here.")
-
-;; This macro is used to "load" libraries, it will check whether the
-;; library is present (i.e. found in load-path). If found
-;; initialization code is run, else an error message containing
-;; download URL is displayed.
-
-(defmacro slu-dot-emacs-for-lib (lib url init)
-  `(if (locate-library (format "%s" ,lib))
-       ,init
-     (message "[dot-emacs] Cannot find %s - download it from %s" ,lib ,url)))
-
-(defmacro slu-dot-emacs-load-file (file url init)
-  `(let ((full-path (concat slu-dot-emacs-my-lisp-dir ,file)))
-     (if (file-exists-p full-path)
-	 (progn
-	   (load-file full-path)
-	   ,init)
-     (message "[dot-emacs] Cannot find %s - download it from %s" ,file ,url))))
-
-(defun slu-dot-emacs-add-to-load-path (dir url)
-  "If given dir exist, then add it to load-path, else print message with download URL."
-  (let ((full-path (concat slu-dot-emacs-my-lisp-dir dir)))
-    (if (file-exists-p full-path)
-	(add-to-list 'load-path (expand-file-name full-path))
-      (message "[dot-emacs] Cannot find %s - download it from %s" dir url)
-      nil)))
-
-(defvar slu-dot-emacs-git-executable
-  (executable-find "git")
-  "Git executable.")
 
 (defun slu-dot-emacs-clone (git-url)
   "Clone git repository from GIT-URL"
   (if slu-dot-emacs-git-executable
-      (let ((default-directory slu-dot-emacs-my-lisp-dir)
+      (let ((default-directory slu-dot-emacs-lisp-dir)
             (dir-name (file-name-nondirectory git-url)))
         (if (not (file-exists-p dir-name))
             (with-temp-buffer
@@ -98,46 +95,49 @@
                              (list slu-dot-emacs-git-executable nil t nil)
                              (list "--no-pager" "clone" git-url)))))
                 (if (zerop exit-code)
-                    (message "%s" (buffer-string))
-                  (message "[dot-emacs] Unable to clone git repository: %s\n%s"
-                           git-url
-                           (buffer-string)))))
-          (message "[dot-emacs] Git repository already cloned, skipping")))
-    (message "[dot-emacs] No git, unable to clone")))
+                    (progn
+                      (message "%s" (buffer-string))
+                      dir-name)
+                  (progn
+                   (message "[dot-emacs] Unable to clone git repository: %s\n%s"
+                            git-url
+                            (buffer-string))
+                   nil)))))
+          (progn
+            (message "[dot-emacs] Git repository already cloned, skipping")
+            (concat slu-dot-emacs-lisp-dir dir-name)))
+    (progn
+      (message "[dot-emacs] No git, unable to clone")
+      nil)))
+
 
 (defun slu-dot-emacs-clone-and-add (git-url)
-  "Clone git repo and add wc to load-path."
+  "Clone git repository and add the cloned directory to
+ load-path."
   (progn
     (slu-dot-emacs-clone git-url)
-    (let ((full-path (concat slu-dot-emacs-my-lisp-dir (file-name-nondirectory git-url))))
+    (let ((full-path (concat slu-dot-emacs-lisp-dir (file-name-nondirectory git-url))))
       (if (file-exists-p full-path)
 	  (add-to-list 'load-path (expand-file-name full-path))
         (message "[dot-emacs] Unable to install from %s" git-url)
         nil))))
+
 
 (defun slu-dot-emacs-compile-lisp-files ()
   "Compiles the elisp files (.el files)"
   (interactive)
   (mapcar (lambda (x) (byte-recompile-directory x 0))
 	  (list slu-dot-emacs-config-root-dir
-		slu-dot-emacs-my-lisp-dir)))
+		slu-dot-emacs-lisp-dir)))
+
 
 (let ((start-time (current-time)))
   (message "[dot-emacs] dot-emacs %s starting to load configuration..." "1.0")
 
   (unless slu-dot-emacs-dryrun
-    ;; Set some variables used to configure modes etc.
-    (setq my-calendar-latitude 55.675876)
-    (setq my-calendar-longitude 12.569066)
-    (setq my-calendar-location-name "København")
-    (setq my-timeclock-file "~/Projects/My/timelogs/timelog")
-    (setq my-timeclock-workday 26640) ; 7.4 hour/day, e.g. 37 hours work week
-    (setq my-diary-file "~/diary")
-    (setq my-ispell-change-dictionary "dansk")
-    (setq my-alternate-browser  "/usr/bin/chromium-browser")
 
-    (unless (file-exists-p slu-dot-emacs-my-lisp-dir)
-      (make-directory slu-dot-emacs-my-lisp-dir t))
+    (unless (file-exists-p slu-dot-emacs-lisp-dir)
+      (make-directory slu-dot-emacs-lisp-dir t))
 
     ;; Load all lisp and configuration files
     (while slu-dot-emacs-config-subdirs
