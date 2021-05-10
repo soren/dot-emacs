@@ -26,12 +26,12 @@
 ;;; Code:
 
 (if (locate-file "ccrypt" exec-path exec-suffixes 'file-executable-p)
-    (let ((url "http://ccrypt.sourceforge.net/download/ps-ccrypt.el"))
-      (let ((target (concat slu-dot-emacs-lisp-dir (file-name-nondirectory url))))
-        (if (not (file-exists-p target))
-            (url-copy-file url target 't))
-        (load-file target)))
-
-  (require 'ps-ccrypt))
+    (progn
+      (let ((url "http://ccrypt.sourceforge.net/download/ps-ccrypt.el"))
+        (let ((target (concat slu-dot-emacs-lisp-dir (file-name-nondirectory url))))
+          (if (not (file-exists-p target))
+              (url-copy-file url target 't))
+          (load-file target)))
+      (require 'ps-ccrypt)))
 
 ;;; ccrypt.el ends here
