@@ -59,7 +59,7 @@
 	  '((top . 16) (left . 80)
 	    (width . 130) (height . 50)
 	    (cursor-type . box)
-            (font . "-outline-DejaVu Sans Mono-normal-normal-normal-mono-20-*-*-*-c-*-iso8859-1")))))
+            (font . "Consolas-14")))))
 
 (defun reset-frame-size-and-position-huge()
   "Resets the currect frame to much larger defaults."
@@ -69,7 +69,7 @@
           '((top . 14) (left . 80)
             (width . 120) (height . 38)
             (cursor-type . box)
-            (font . "-outline-DejaVu Sans Mono-normal-normal-normal-mono-36-*-*-*-c-*-iso8859-1")))
+            (font . "Consolas-18")))
     (apply-frame-size-and-position)))
 
 (defun reset-frame-size-and-position-large()
@@ -80,7 +80,7 @@
           '((top . 14) (left . 80)
             (width . 120) (height . 38)
             (cursor-type . box)
-            (font . "-outline-DejaVu Sans Mono-normal-normal-normal-mono-24-*-*-*-c-*-iso8859-1")))
+            (font . "Consolas-16")))
     (apply-frame-size-and-position)))
 
 (defun reset-frame-size-and-position-small()
@@ -91,7 +91,7 @@
           '((top . 16) (left . 64)
             (width . 150) (height . 58)
             (cursor-type . box)
-            (font . "-outline-DejaVu Sans Mono-normal-normal-normal-mono-18-*-*-*-c-*-iso8859-1")))
+            (font . "Consolas-14")))
     (apply-frame-size-and-position)))
 
 (defun apply-frame-size-and-position()
@@ -142,7 +142,15 @@
 ;; settings (for this and future frames)
 (if window-system
     (progn
-      (reset-frame-size-and-position-huge)
+      (reset-frame-size-and-position-large)
+      (let ((faces '(mode-line
+                     mode-line-buffer-id
+                     mode-line-emphasis
+                     mode-line-highlight
+                     mode-line-inactive)))
+        (mapc
+         (lambda (face) (set-face-attribute face nil :font "Consolas-12"))
+         faces))
       (persist-display-settings)))
 
 ;;; 00-frames.el ends here
