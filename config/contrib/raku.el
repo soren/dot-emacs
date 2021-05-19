@@ -27,13 +27,13 @@
 
 ;;; Code:
 
-(unless (package-installed-p 'perl6-mode)
-  (package-install 'perl6-mode))
+(unless (package-installed-p 'raku-mode)
+  (package-install 'raku-mode))
 
 
 (if (and (package-installed-p 'flycheck)
-         (not (package-installed-p 'flycheck-perl6)))
+         (not (package-installed-p 'flycheck-raku)))
     (progn
-      (package-install 'flycheck-perl6)))
+      (package-install 'flycheck-raku)))
 
 ;;; raku.el ends here
