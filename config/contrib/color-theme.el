@@ -23,13 +23,12 @@
 
 ;;; Code:
 
-(if window-system
-    (let ((git-url "https://github.com/sellout/emacs-color-theme-solarized"))      
-      (slu-dot-emacs-clone git-url)
-      (add-to-list 'custom-theme-load-path
-                   (concat slu-dot-emacs-lisp-dir (file-name-nondirectory git-url)))
-      (setq frame-background-mode 'dark)
-      (set-frame-parameter nil 'background-mode 'dark)
-      (load-theme 'solarized t)))
+(let ((git-url "https://github.com/sellout/emacs-color-theme-solarized"))
+  (slu-dot-emacs-clone git-url)
+  (add-to-list 'custom-theme-load-path
+               (concat slu-dot-emacs-lisp-dir (file-name-nondirectory git-url)))
+  (setq frame-background-mode 'dark)
+  (set-frame-parameter nil 'background-mode 'dark)
+  (load-theme 'solarized t))
 
 ;;; color-theme.el ends here
