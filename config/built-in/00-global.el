@@ -178,4 +178,13 @@
 (global-set-key "\C-x\C-k" 'kill-region)
 (global-set-key "\C-c\C-k" 'kill-region)
 
+
+;; ---------------------------------------------------------------------
+;; Mouse setup:
+
+;; Enable mouse when running in a terminal
+(unless (display-graphic-p)
+  (xterm-mouse-mode 1))
+
+
 ;;; 00-global.el ends here
