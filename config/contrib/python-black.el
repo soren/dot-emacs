@@ -1,6 +1,6 @@
-;;; ccrypt.el --- set up ccrypt wrapper -*-coding:utf-8-*-
+;;; python-black.el --- python black set up -*-coding:utf-8-*-
 
-;; Copyright (c) 2019 Søren Lund <soren@lund.org>
+;; Copyright (c) 2021 Søren Lund <soren@lund.org>
 
 ;; This file is part of dot-emacs.
 
@@ -19,19 +19,12 @@
 
 ;;; Commentary:
 
-;; If ccrypt is installed, then download and use the ps-ccrypt module.
-
-;; See http://ccrypt.sourceforge.net/
+;; See https://github.com/wbolster/emacs-python-black
 
 ;;; Code:
 
-(if (locate-file "ccrypt" exec-path exec-suffixes 'file-executable-p)
-    (progn
-      (let ((url "http://ccrypt.sourceforge.net/download/ps-ccrypt.el"))
-        (let ((target (concat slu-dot-emacs-lisp-dir (file-name-nondirectory url))))
-          (if (not (file-exists-p target))
-              (url-copy-file url target 't))
-          (load-file target)))
-      (require 'ps-ccrypt)))
+(if (locate-file "black" exec-path exec-suffixes 'file-executable-p)
+    (unless (package-installed-p 'python-black)
+      (package-install 'python-black)))
 
-;;; ccrypt.el ends here
+;;; python-black.el ends here

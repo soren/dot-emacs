@@ -1,6 +1,6 @@
-;;; ccrypt.el --- set up ccrypt wrapper -*-coding:utf-8-*-
+;;; mixed-pitch-mode.el --- mixed pitch set up -*-coding:utf-8-*-
 
-;; Copyright (c) 2019 Søren Lund <soren@lund.org>
+;; Copyright (c) 2021 Søren Lund <soren@lund.org>
 
 ;; This file is part of dot-emacs.
 
@@ -19,19 +19,13 @@
 
 ;;; Commentary:
 
-;; If ccrypt is installed, then download and use the ps-ccrypt module.
-
-;; See http://ccrypt.sourceforge.net/
+;; See https://gitlab.com/jabranham/mixed-pitch
 
 ;;; Code:
 
-(if (locate-file "ccrypt" exec-path exec-suffixes 'file-executable-p)
-    (progn
-      (let ((url "http://ccrypt.sourceforge.net/download/ps-ccrypt.el"))
-        (let ((target (concat slu-dot-emacs-lisp-dir (file-name-nondirectory url))))
-          (if (not (file-exists-p target))
-              (url-copy-file url target 't))
-          (load-file target)))
-      (require 'ps-ccrypt)))
+(unless (package-installed-p 'mixed-pitch)
+  (package-install 'mixed-pitch))
 
-;;; ccrypt.el ends here
+(add-hook 'org-mode-hook 'mixed-pitch-mode)
+
+;;; mixed-pitch.el ends here

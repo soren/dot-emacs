@@ -1,6 +1,6 @@
-;;; ccrypt.el --- set up ccrypt wrapper -*-coding:utf-8-*-
+;;; csv-mode.el --- csv mode set up -*-coding:utf-8-*-
 
-;; Copyright (c) 2019 Søren Lund <soren@lund.org>
+;; Copyright (c) 2021 Søren Lund <soren@lund.org>
 
 ;; This file is part of dot-emacs.
 
@@ -19,19 +19,11 @@
 
 ;;; Commentary:
 
-;; If ccrypt is installed, then download and use the ps-ccrypt module.
-
-;; See http://ccrypt.sourceforge.net/
+;; See https://elpa.gnu.org/packages/csv-mode.html
 
 ;;; Code:
 
-(if (locate-file "ccrypt" exec-path exec-suffixes 'file-executable-p)
-    (progn
-      (let ((url "http://ccrypt.sourceforge.net/download/ps-ccrypt.el"))
-        (let ((target (concat slu-dot-emacs-lisp-dir (file-name-nondirectory url))))
-          (if (not (file-exists-p target))
-              (url-copy-file url target 't))
-          (load-file target)))
-      (require 'ps-ccrypt)))
+(unless (package-installed-p 'csv-mode)
+  (package-install 'csv-mode))
 
-;;; ccrypt.el ends here
+;;; csv-mode.el ends here
